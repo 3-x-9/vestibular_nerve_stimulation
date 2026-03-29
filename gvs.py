@@ -40,12 +40,16 @@ class GVS:
     def set_intensity(self, percent):
         if percent > 100 or percent < 0:
             raise ValueError("Value must be 0-100")
-        self.lib.set_intensity(percent)
+        result = self.lib.set_intensity(percent)
+        if result != 0:
+            raise RuntimeError("Failed to set intensity")
     
     def set_frequency(self, frequency):
         if frequency > 1000000 or frequency < 0:
             raise ValueError("Value must be 0-1000000")
-        self.lib.set_frequency(frequency)
+        result = self.lib.set_frequency(frequency)
+        if result != 0:
+            raise RuntimeError("Failed to set frequency")
     
     def set_direction(self, direction):
         if direction > 1 or direction < 0:

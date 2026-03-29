@@ -1,10 +1,8 @@
 #include <stdio.h>
 #include <pigpio.h>
 
-#define PIN_E1 18
-#define PIN_E2 19
-#define PIN_B1 20
-#define PIN_B2 21
+#define PIN_B1 18
+#define PIN_B2 19
 
 typedef struct {
     int frequency;
@@ -21,8 +19,6 @@ int gvs_init() {
         return -1;
     }
 
-    gpioSetMode(PIN_E1, PI_OUTPUT);
-    gpioSetMode(PIN_E2, PI_OUTPUT);
     gpioSetMode(PIN_B1, PI_OUTPUT);
     gpioSetMode(PIN_B2, PI_OUTPUT);
 
@@ -36,15 +32,11 @@ int gvs_init() {
 
 int gvs_start() {
     if (state.direction == 0) {
-        gpioWrite(PIN_B1, 1);
-        gpioWrite(PIN_B2, 0);
-        gpioHardwarePWM(PIN_E1, state.frequency, state.duty_cycle);
-        gpioHardwarePWM(PIN_E2, state.frequency, 0);
+        gpioHardwarePWM(PIN_B1, state.frequency, state.duty_cycle);
+        gpioHardwarePWM(PIN_B2, state.frequency, 0);
     } else {
-        gpioWrite(PIN_B1, 0);
-        gpioWrite(PIN_B2, 1);
-        gpioHardwarePWM(PIN_E1, state.frequency, 0);
-        gpioHardwarePWM(PIN_E2, state.frequency, state.duty_cycle);
+        gpioHardwarePWM(PIN_B1, state.frequency, 0);
+        gpioHardwarePWM(PIN_B2, state.frequency, state.duty_cycle);
     }
 
     state.running = 1;
@@ -52,10 +44,8 @@ int gvs_start() {
 }
 
 int gvs_stop() {
-    gpioWrite(PIN_E1, 0);
-    gpioWrite(PIN_E2, 0);
-    gpioWrite(PIN_B1, 0);
-    gpioWrite(PIN_B2, 0);
+    gpioHardwarePWM(PIN_B1, 0, 0);
+    gpioHardwarePWM(PIN_B2, 0, 0);
     state.running = 0;
     return 0;
 }
@@ -66,7 +56,7 @@ int set_intensity(int percent) {
         return -1;
     }
     
-    state.duty_cycle = (percent * 10000) / 100;
+    state.duty_cycle = percent * 10000;
     if (state.running) {
         gvs_start();
     }
@@ -99,10 +89,6 @@ int set_direction(int direction) {
 }
 
 int gvs_emergency_stop() {
-    gpioWrite(PIN_E1, 0);
-    gpioWrite(PIN_E2, 0);
-    gpioWrite(PIN_B1, 0);
-    gpioWrite(PIN_B2, 0);
-    gpioTerminate();
+    gvs_stop();
     return 0;
 }
