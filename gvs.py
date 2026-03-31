@@ -55,3 +55,8 @@ class GVS:
         if direction > 1 or direction < 0:
             raise ValueError("Value must be 0-1")
         self.lib.set_direction(direction)
+
+    def set_status(self, status):
+        if status > 1 or status < 0:
+            raise ValueError("Value must be 0-1")
+        self.lib.set_status(status)

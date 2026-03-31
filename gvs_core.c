@@ -88,6 +88,20 @@ int set_direction(int direction) {
     return 0;
 }
 
+int set_status(int status) {
+    if (status > 1 || status < 0) {
+        printf("invalid status");
+        return -1;
+    }
+    state.running = status;
+    if (state.running) {
+        gvs_start();
+    } else {
+        gvs_stop();
+    }
+    return 0;
+}
+
 int gvs_emergency_stop() {
     gvs_stop();
     return 0;

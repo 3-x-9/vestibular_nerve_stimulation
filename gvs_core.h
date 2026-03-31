@@ -8,5 +8,6 @@ int gvs_emergency_stop();
 int set_intensity(int percent);
 int set_frequency(int frequency);
 int set_direction(int direction);
+int set_status(int status);
 
 #endif
