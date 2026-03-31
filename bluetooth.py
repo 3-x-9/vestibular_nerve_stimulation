@@ -24,7 +24,7 @@ def main(adapter_address, gvs):
         value = [0],
         notifying = False,
         flags = ["write", "write-without-response"],
-        write_callback = lambda value, options: gvs.set_intensity(int.from_bytes(value, byteorder='little'))
+        write_callback = on_intensity_write
     )
 
     gvs_device.add_characteristic(
@@ -34,7 +34,7 @@ def main(adapter_address, gvs):
         value = [0],
         notifying = False,
         flags = ["write", "write-without-response"],
-        write_callback = lambda value, options: gvs.set_direction(int.from_bytes(value, byteorder='little'))
+        write_callback = on_direction_write
     )
 
     gvs_device.add_characteristic(
@@ -44,7 +44,7 @@ def main(adapter_address, gvs):
         value = [0],
         notifying = False,
         flags = ["write", "write-without-response"],
-        write_callback = lambda value, options: gvs.set_frequency(int.from_bytes(value, byteorder='little'))
+        write_callback = on_frequency_write
     )
 
     gvs_device.add_characteristic(
@@ -54,7 +54,7 @@ def main(adapter_address, gvs):
         value = [0],
         notifying = False,
         flags = ["write", "write-without-response"],
-        write_callback = lambda value, options: gvs.set_status(int.from_bytes(value, byteorder='little'))
+        write_callback = on_status_write
     )
 
     gvs_device.publish()
